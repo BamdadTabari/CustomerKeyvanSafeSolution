@@ -1,4 +1,5 @@
-﻿using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Users;
+﻿using KeyvanSafe.Shared.Certain.Constants;
+using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -20,7 +21,11 @@ public class RoleEntityConfiguration : IEntityTypeConfiguration<Role>
     public void Configure(EntityTypeBuilder<Role> builder)
     {
         builder.HasKey(x => x.Id);
-
+        #region Mapping
+        builder.Property(b => b.Title)
+            .HasMaxLength(Defaults.MaxTitleLength)
+            .IsRequired();
+        #endregion
         #region Navigations
 
         builder

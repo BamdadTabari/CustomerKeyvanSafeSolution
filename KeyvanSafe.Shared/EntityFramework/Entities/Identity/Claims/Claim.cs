@@ -22,6 +22,11 @@ public class ClaimEntityConfiguration : IEntityTypeConfiguration<Claim>
     {
         builder.HasKey(x => x.Id);
 
+        #region Mapping
+        builder.Property(b => b.Value)
+          .IsRequired();
+        #endregion
+
         #region Navigations
 
         builder
