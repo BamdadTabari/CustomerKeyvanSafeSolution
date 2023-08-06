@@ -1,7 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-
-namespace KeyvanSafe.Shared.Assistant.Extension;
+﻿namespace KeyvanSafe.Shared.Assistant.Extension;
 
 public static class ControllerExtension
 {
