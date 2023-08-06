@@ -1,6 +1,6 @@
 ﻿namespace KeyvanSafe.Shared.Certain.Enums;
 
-public enum UserState
+public enum UserStateEnum
 {
     Active = 1,
     InActive,

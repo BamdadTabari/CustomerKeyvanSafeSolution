@@ -1,5 +1,4 @@
-﻿using Dayana.Shared.Basic.MethodsAndObjects.Models;
-using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Users;
+﻿using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -28,12 +27,16 @@ public class RoleEntityConfiguration : IEntityTypeConfiguration<Role>
             .HasMany(x => x.UserRoles)
             .WithOne(x => x.Role)
             .HasForeignKey(x => x.RoleId)
+            // just for now, at this time I choose the "DeleteBehavior.Restrict" ,
+            // because there is not any logic selected yet, so I just select the easy way
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasMany(x => x.RolePermission)
             .WithOne(x => x.Role)
             .HasForeignKey(x => x.RoleId)
+            // just for now, at this time I choose the "DeleteBehavior.Restrict" ,
+            // because there is not any logic selected yet, so I just select the easy way
             .OnDelete(DeleteBehavior.Restrict);
 
         #endregion

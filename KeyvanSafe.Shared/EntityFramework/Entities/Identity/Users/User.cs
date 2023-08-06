@@ -1,9 +1,5 @@
-﻿using Dayana.Shared.Basic.ConfigAndConstants.Constants;
-using Dayana.Shared.Basic.MethodsAndObjects.Extension;
-using Dayana.Shared.Basic.MethodsAndObjects.Models;
-using Dayana.Shared.Domains.Blog.BlogPosts;
-using Dayana.Shared.Domains.Blog.Comments;
-using Dayana.Shared.Domains.Blog.Issues;
+﻿using KeyvanSafe.Shared.Assistant.Extension;
+using KeyvanSafe.Shared.Certain.Constants;
 using KeyvanSafe.Shared.Certain.Enums;
 using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Claims;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +18,7 @@ public class User : BaseEntity
     public bool IsMobileConfirmed { get; set; }
 
     public string Email { get; set; }
-    public bool IsEmailConfirmed { get; set; }
+    //public bool IsEmailConfirmed { get; set; }
 
     #endregion
 
@@ -39,7 +35,7 @@ public class User : BaseEntity
     #endregion
 
     #region Profile
-    public UserState State { get; set; }
+    public UserStateEnum State { get; set; }
 
     #endregion
 
@@ -71,16 +67,16 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder.Property(b => b.Mobile)
-            .HasMaxLength(Defaults.MobileNumberMaxLength);
+            .IsRequired();
 
         builder.Property(b => b.Email)
-            .HasMaxLength(Defaults.EmailLength);
+            .IsRequired();
 
         builder.Property(b => b.PasswordHash)
-            .HasMaxLength(Defaults.PasswordHashLength);
+            .HasMaxLength(Defaults.PasswordHashLength)
+            .IsRequired();
 
         builder.Property(b => b.SecurityStamp)
-            .IsConcurrencyToken()
             .HasMaxLength(Defaults.SecurityStampLength)
             .IsFixedLength();
 
@@ -93,8 +89,8 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         #region Conversions
 
         builder.Property(x => x.State)
-            .HasConversion(new EnumToStringConverter<UserState>())
-            .HasMaxLength(UserState.Active.GetMaxLength());
+            .HasConversion(new EnumToStringConverter<UserStateEnum>())
+            .HasMaxLength(UserStateEnum.Active.GetMaxLength());
 
         #endregion
 
@@ -105,15 +101,17 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
             .HasMany(x => x.Claims)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
+            // just for now, at this time I choose the "DeleteBehavior.Restrict" ,
+            // because there is not any logic selected yet, so I just select the easy way
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasMany(x => x.UserRoles)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
+            // just for now, at this time I choose the "DeleteBehavior.Restrict" ,
+            // because there is not any logic selected yet, so I just select the easy way
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
-
-
     }
 }

@@ -21,19 +21,21 @@ public class UserRoleEntityConfiguration : IEntityTypeConfiguration<UserRole>
     public void Configure(EntityTypeBuilder<UserRole> builder)
     {
 
-        builder.HasKey(x => new { x.UserId, x.RoleId });
+        builder.HasKey(x => new { x.UserId, x.RoleId, x.Id });
 
         #region Navigations
 
         builder
             .HasOne(x => x.User)
             .WithMany(x => x.UserRoles)
-            .HasForeignKey(x => x.UserId);
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasOne(x => x.Role)
             .WithMany(x => x.UserRoles)
-            .HasForeignKey(x => x.RoleId);
+            .HasForeignKey(x => x.RoleId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         #endregion
     }

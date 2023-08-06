@@ -1,5 +1,4 @@
-﻿using Dayana.Shared.Basic.MethodsAndObjects.Models;
-using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Permissions;
+﻿using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Permissions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -22,7 +21,7 @@ public class RolePermissionEntityConfiguration : IEntityTypeConfiguration<RolePe
 {
     public void Configure(EntityTypeBuilder<RolePermission> builder)
     {
-        builder.HasKey(x => new { x.RoleId, x.PermissionId });
+        builder.HasKey(x => new { x.RoleId, x.PermissionId, x.Id });
 
         #region Navigations
 
@@ -30,13 +29,13 @@ public class RolePermissionEntityConfiguration : IEntityTypeConfiguration<RolePe
             .HasOne(x => x.Role)
             .WithMany(x => x.RolePermission)
             .HasForeignKey(x => x.RoleId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasOne(x => x.Permission)
             .WithMany(x => x.Roles)
             .HasForeignKey(x => x.PermissionId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
 
         #endregion
 

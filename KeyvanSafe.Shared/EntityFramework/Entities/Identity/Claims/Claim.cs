@@ -22,14 +22,6 @@ public class ClaimEntityConfiguration : IEntityTypeConfiguration<Claim>
     {
         builder.HasKey(x => x.Id);
 
-        #region Mappings
-
-        builder.Property(b => b.Value)
-        .HasMaxLength(Defaults.LongLength1)
-            .IsRequired();
-
-        #endregion
-
         #region Navigations
 
         builder

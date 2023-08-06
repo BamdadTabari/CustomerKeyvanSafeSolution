@@ -1,5 +1,4 @@
-﻿using Dayana.Shared.Basic.ConfigAndConstants.Constants;
-using Dayana.Shared.Basic.MethodsAndObjects.Models;
+﻿using KeyvanSafe.Shared.Certain.Constants;
 using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Roles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -28,11 +27,15 @@ public class PermissionEntityConfiguration : IEntityTypeConfiguration<Permission
         #region Mappings
 
         builder.Property(b => b.Value)
-            .HasMaxLength(Defaults.NameLength)
+            .IsRequired();
+
+        builder.Property(b => b.Title)
+            .HasMaxLength(Defaults.MaxTitleLength)
             .IsRequired();
 
         builder.Property(b => b.Name)
-            .HasMaxLength(Defaults.MaxTitleLength);
+            .HasMaxLength(Defaults.MaxTitleLength)
+            .IsRequired();
 
         #endregion
     }
