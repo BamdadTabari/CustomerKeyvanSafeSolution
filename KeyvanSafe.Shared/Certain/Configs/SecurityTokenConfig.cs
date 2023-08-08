@@ -4,10 +4,10 @@ public class SecurityTokenConfig
 {
     public const string Key = "SecurityToken";
 
-    public string Issuer { get; set; }
-    public string Audience { get; set; }
-    public string AccessTokenSecretKey { get; set; }
-    public TimeSpan AccessTokenLifetime { get; set; }
-    public string RefreshTokenSecretKey { get; set; }
-    public TimeSpan RefreshTokenLifetime { get; set; }
+    public string Issuer { get; set; } = "https://localhost";
+    public string Audience { get; set; } = "https://localhost";
+    public string AccessTokenSecretKey { get; set; } = "WQ7+dPhLEHdhdaKNzu!ck-fg86TPhUfd#E&&Qq+=vUtfxJ!@sDfe#u^prXW2&Qhmy33u!@e?5-xb*";
+    public TimeSpan AccessTokenLifetime { get; set; } = TimeSpan.FromDays(7);
+    public string RefreshTokenSecretKey { get; set; } = "WQ7+dPsdjifdsklhFBNzu!ck-fg86TPhUAPOSIDPIOUFDIOshF#u^prXW2&Qhmy33u!@e5455sdfd";
+    public TimeSpan RefreshTokenLifetime { get; set; } = TimeSpan.FromDays(7);
 }
