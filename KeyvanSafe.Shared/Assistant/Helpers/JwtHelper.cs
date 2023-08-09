@@ -1,5 +1,4 @@
-﻿using KeyvanSafe.Shared.Assistant.Helpers;
-using KeyvanSafe.Shared.Certain.Configs;
+﻿using KeyvanSafe.Shared.Certain.Configs;
 using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Users;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -25,7 +24,7 @@ public static class JwtHelper
 
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.EncodeInt()),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.UniqueName, user.Username.ToLower())
         };
 
@@ -65,7 +64,7 @@ public static class JwtHelper
         return isValid;
     }
 
-    private static JwtPayload GetPayload(string token)
+    public static JwtPayload GetPayload(string token)
     {
         if (string.IsNullOrEmpty(token))
             return null;
