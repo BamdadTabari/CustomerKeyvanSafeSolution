@@ -21,7 +21,6 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Models\Requests\" />
 	  <Folder Include="Models\Results\" />
 	</ItemGroup>
 </Project>
