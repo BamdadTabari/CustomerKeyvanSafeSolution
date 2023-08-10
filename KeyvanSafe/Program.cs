@@ -1,12 +1,15 @@
-using Dayana.Server.Api.Extensions.Middleware;
 using KeyvanSafe.Server.Configs;
 
 #region builder part
 var builder = WebApplication.CreateBuilder(args);
+string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+var appName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
 
+builder.Configuration.AddJsonFile("appsettings.json")
+            .AddEnvironmentVariables();
 ConfigurationManager configuration = builder.Configuration;
 IWebHostEnvironment environment = builder.Environment;
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Add services to the container.
 builder.Services.AddServices(configuration);
 builder.Services.AddControllers();

@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Net;
 
-namespace Dayana.Server.Api.Extensions.Middleware;
+namespace KeyvanSafe.Server.Configs;
 
 internal static class ConfiguredExceptionHandlerMiddleware
 {
