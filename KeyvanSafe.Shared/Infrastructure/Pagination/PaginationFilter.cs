@@ -32,6 +32,7 @@ public record DefaultPaginationFilter : PaginationFilter
     public IEnumerable<long>? LongValueList { get; set; }
     public IEnumerable<string>? StringValueList { get; set; }
     public string? Title { get; set; }
+    public string? Name { get; set; }
     public SortByEnum? SortByEnum { get; init; }
     public UserSortByEnum? UserSortByEnum { get; init; }
 }
