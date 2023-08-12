@@ -1,4 +1,5 @@
 ﻿using KeyvanSafe.Shared.EntityFramework.Configs;
+using KeyvanSafe.Shared.Persistence.HttpObjects;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ public static class ServiceInjection
         // Add services to the container.
         services.AddControllersWithViews();
         services.AddRazorPages();
+        services.AddScoped<IHttpService, HttpService>();
         // register an HttpClient that points to itself
         services.AddSingleton(sp =>
         {
