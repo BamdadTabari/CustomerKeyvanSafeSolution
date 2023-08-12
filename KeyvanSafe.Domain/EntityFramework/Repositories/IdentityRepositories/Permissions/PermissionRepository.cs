@@ -1,4 +1,9 @@
 ﻿using KeyvanSafe.Domain.EntityFramework.Interfaces.IdentityRepositories;
+using KeyvanSafe.Shared.Assistant.Extension;
+using KeyvanSafe.Shared.EntityFramework.Configs;
+using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Permissions;
+using KeyvanSafe.Shared.Infrastructure.Pagination;
+using KeyvanSafe.Shared.Persistence.Extensions.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KeyvanSafe.Domain.EntityFramework.Repositories.IdentityRepositories.Permissions;
@@ -43,7 +48,7 @@ public class PermissionRepository : Repository<Permission>, IPermissionRepositor
                 .Include(x => x.Roles);
 
             query = query.ApplyFilter(filter);
-            query = query.ApplySort();
+            query = query.ApplySort(filter.SortByEnum);
 
             return await query.Paginate(filter.Page, filter.PageSize).ToListAsync();
         }

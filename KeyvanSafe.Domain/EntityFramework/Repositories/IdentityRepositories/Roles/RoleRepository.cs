@@ -1,4 +1,10 @@
 ﻿using KeyvanSafe.Domain.EntityFramework.Interfaces.IdentityRepositories;
+using KeyvanSafe.Shared.Assistant.Extension;
+using KeyvanSafe.Shared.Certain.Enums;
+using KeyvanSafe.Shared.EntityFramework.Configs;
+using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Roles;
+using KeyvanSafe.Shared.Infrastructure.Pagination;
+using KeyvanSafe.Shared.Persistence.Extensions.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KeyvanSafe.Domain.EntityFramework.Repositories.IdentityRepositories.Roles;
@@ -44,7 +50,7 @@ public class RoleRepository : Repository<Role>, IRoleRepository
         query = query.AsNoTracking();
 
         query = query.ApplyFilter(filter);
-        query = query.ApplySort(filter.SortBy);
+        query = query.ApplySort(filter.SortByEnum);
 
         return await query.Paginate(filter.Page, filter.PageSize).ToListAsync();
     }

@@ -1,5 +1,10 @@
 ﻿using KeyvanSafe.Domain.EntityFramework.Interfaces.IdentityRepositories;
 using KeyvanSafe.Domain.EntityFramework.Interfaces.UnitOfWorks;
+using KeyvanSafe.Domain.EntityFramework.Repositories.IdentityRepositories.Claims;
+using KeyvanSafe.Domain.EntityFramework.Repositories.IdentityRepositories.Permissions;
+using KeyvanSafe.Domain.EntityFramework.Repositories.IdentityRepositories.Roles;
+using KeyvanSafe.Domain.EntityFramework.Repositories.IdentityRepositories.Users;
+using KeyvanSafe.Shared.EntityFramework.Configs;
 
 namespace KeyvanSafe.Domain.EntityFramework.Repositories.UnitOfWorks;
 

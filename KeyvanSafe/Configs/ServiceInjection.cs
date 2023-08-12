@@ -1,4 +1,6 @@
-﻿using KeyvanSafe.Shared.EntityFramework.Configs;
+﻿using KeyvanSafe.Domain.EntityFramework.Interfaces.UnitOfWorks;
+using KeyvanSafe.Domain.EntityFramework.Repositories.UnitOfWorks;
+using KeyvanSafe.Shared.EntityFramework.Configs;
 using KeyvanSafe.Shared.Persistence.HttpObjects;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -31,7 +33,7 @@ public static class ServiceInjection
           options.UseSqlServer(configuration.GetConnectionString("ServerDbConnection"))
           .EnableDetailedErrors());
 
-        //services.AddScoped<IUnitOfWorkIdentity, UnitOfWorkIdentity>();
+        services.AddScoped<IUnitOfWorkIdentity, UnitOfWorkIdentity>();
         //services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

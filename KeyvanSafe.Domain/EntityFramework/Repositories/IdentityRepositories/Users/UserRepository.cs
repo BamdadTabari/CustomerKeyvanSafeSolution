@@ -1,4 +1,10 @@
 ﻿using KeyvanSafe.Domain.EntityFramework.Interfaces.IdentityRepositories;
+using KeyvanSafe.Shared.Assistant.Extension;
+using KeyvanSafe.Shared.Certain.Enums;
+using KeyvanSafe.Shared.EntityFramework.Configs;
+using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Users;
+using KeyvanSafe.Shared.Infrastructure.Pagination;
+using KeyvanSafe.Shared.Persistence.Extensions.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KeyvanSafe.Domain.EntityFramework.Repositories.IdentityRepositories.Users;
@@ -38,7 +44,7 @@ public class UserRepository : Repository<User>, IUserRepository
         return user;
     }
 
-    public async Task<int> CountUsersByFilterAsync(CustomaizedPaginationFilterTwo<List<UserState>?, UserSortBy?> filter)
+    public async Task<int> CountUsersByFilterAsync(DefaultPaginationFilter filter)
     {
         var query = _queryable;
 
@@ -57,22 +63,19 @@ public class UserRepository : Repository<User>, IUserRepository
         if (ids?.Any() == true)
             query = query.Where(x => ids.Contains(x.Id));
 
-        query = query.ApplySort(UserSortBy.CreationDate);
+        query = query.ApplySort(UserSortByEnum.CreationDate);
 
         return await query.ToListAsync();
     }
 
-    public async Task<List<User>> GetUsersByFilterAsync(CustomaizedPaginationFilterTwo<List<UserState>?, UserSortBy?> filter)
+    public async Task<List<User>> GetUsersByFilterAsync(DefaultPaginationFilter filter)
     {
         var query = _queryable;
 
         query = query.AsNoTracking();
 
-        // Includes
-        //if (filter.Include is { Role: true }) query = query.Include(x => x.UserRoles);
-
         query = query.ApplyFilter(filter);
-        query = query.ApplySort(filter.Value2);
+        query = query.ApplySort(filter.UserSortByEnum);
 
         return await query.Paginate(filter.Page, filter.PageSize).ToListAsync();
     }

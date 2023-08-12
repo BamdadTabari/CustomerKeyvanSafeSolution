@@ -1,4 +1,9 @@
 ﻿using KeyvanSafe.Domain.EntityFramework.Interfaces.IdentityRepositories;
+using KeyvanSafe.Shared.Assistant.Extension;
+using KeyvanSafe.Shared.EntityFramework.Configs;
+using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Claims;
+using KeyvanSafe.Shared.Infrastructure.Pagination;
+using KeyvanSafe.Shared.Persistence.Extensions.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KeyvanSafe.Domain.EntityFramework.Repositories.IdentityRepositories.Claims;
@@ -38,7 +43,7 @@ public class ClaimRepository : Repository<Claim>, IClaimRepository
         query = query.AsNoTracking();
 
         query = query.ApplyFilter(filter);
-        query = query.ApplySort(filter.SortBy);
+        query = query.ApplySort(filter.SortByEnum);
 
         return await query.Paginate(filter.Page, filter.PageSize).ToListAsync();
     }

@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KeyvanSafe.Shared\KeyvanSafe.Shared.csproj" />
+    <ProjectReference Include="..\KeyvanSafe.Domain\KeyvanSafe.Domain.csproj" />
   </ItemGroup>
 
 </Project>
