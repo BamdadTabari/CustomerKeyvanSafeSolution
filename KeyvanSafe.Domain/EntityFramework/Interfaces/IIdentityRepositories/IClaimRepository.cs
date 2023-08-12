@@ -1,7 +1,7 @@
 ﻿using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Claims;
 using KeyvanSafe.Shared.Infrastructure.Pagination;
 
-namespace KeyvanSafe.Domain.EntityFramework.Interfaces.IdentityRepositories;
+namespace KeyvanSafe.Domain.EntityFramework.Interfaces.IIdentityRepositories;
 
 public interface IClaimRepository : IRepository<Claim>
 {

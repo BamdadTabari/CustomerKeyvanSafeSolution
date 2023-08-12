@@ -1,6 +1,6 @@
-﻿using KeyvanSafe.Domain.EntityFramework.Interfaces.IdentityRepositories;
+﻿using KeyvanSafe.Domain.EntityFramework.Interfaces.IIdentityRepositories;
 
-namespace KeyvanSafe.Domain.EntityFramework.Interfaces.UnitOfWorks;
+namespace KeyvanSafe.Domain.EntityFramework.Interfaces.IUnitOfWorks;
 
 public interface IUnitOfWorkIdentity : IDisposable
 {

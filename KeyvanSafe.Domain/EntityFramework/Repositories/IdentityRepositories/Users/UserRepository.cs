@@ -1,4 +1,4 @@
-﻿using KeyvanSafe.Domain.EntityFramework.Interfaces.IdentityRepositories;
+﻿using KeyvanSafe.Domain.EntityFramework.Interfaces.IIdentityRepositories;
 using KeyvanSafe.Shared.Assistant.Extension;
 using KeyvanSafe.Shared.Certain.Enums;
 using KeyvanSafe.Shared.EntityFramework.Configs;

@@ -1,7 +1,6 @@
-﻿using System.Net.Http.Json;
+﻿using KeyvanSafe.Shared.Infrastructure.Pagination;
+using System.Net.Http.Json;
 using System.Text.Json;
-
-using KeyvanSafe.Shared.Infrastructure.Pagination;
 
 namespace KeyvanSafe.Shared.Persistence.HttpObjects;
 public class HttpService : IHttpService
