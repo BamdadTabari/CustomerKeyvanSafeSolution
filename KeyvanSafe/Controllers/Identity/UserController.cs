@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using KeyvanSafe.Domain.EntityFramework.Interfaces.IUnitOfWorks;
+using KeyvanSafe.Domain.Specifications.Identity;
 using KeyvanSafe.Shared.Assistant.Helpers;
 using KeyvanSafe.Shared.Certain.Constants;
+using KeyvanSafe.Shared.Certain.Enums;
 using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Users;
 using KeyvanSafe.Shared.Infrastructure.Operations;
 using KeyvanSafe.Shared.Infrastructure.Routes;
@@ -32,7 +34,7 @@ public class UserController : ControllerBase
             .ExistsAsync(new DuplicateUserSpecificationFile(request.Username).ToExpression());
 
         if (isExist)
-            return new OperationResult(OperationResultStatus.UnProcessable, value: GenericErrors<User>.DuplicateError("user name"));
+            return new OperationResult(OperationResultStatusEnum.UnProcessable, value: GenericErrors<User>.DuplicateError("user name"));
 
         var entity = new User()
         {
@@ -47,9 +49,9 @@ public class UserController : ControllerBase
             SecurityStamp = StampGenerator.CreateSecurityStamp(Defaults.SecurityStampLength),
         };
 
-        _unitOfWork.Users.Add(entity);
+        _unitOfWorkIdentity.Users.Add(entity);
 
-        return new OperationResult(OperationResultStatus.Ok, isPersistAble: true, value: entity);
+        var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true, value: entity);
 
         return this.ReturnResponse(operation);
     }
