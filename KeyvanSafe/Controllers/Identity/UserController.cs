@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using KeyvanSafe.Domain.EntityFramework.Interfaces.IUnitOfWorks;
 using KeyvanSafe.Domain.Specifications.Identity;
-using KeyvanSafe.Shared.Assistant.Helpers;
-using KeyvanSafe.Shared.Certain.Constants;
+using KeyvanSafe.Shared.Assistant.Extension;
 using KeyvanSafe.Shared.Certain.Enums;
-using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Users;
+using KeyvanSafe.Shared.Infrastructure.Errors;
 using KeyvanSafe.Shared.Infrastructure.Operations;
 using KeyvanSafe.Shared.Infrastructure.Routes;
 using KeyvanSafe.Shared.Models.Requests;
@@ -34,20 +33,25 @@ public class UserController : ControllerBase
             .ExistsAsync(new DuplicateUserSpecificationFile(request.Username).ToExpression());
 
         if (isExist)
-            return new OperationResult(OperationResultStatusEnum.UnProcessable, value: GenericErrors<User>.DuplicateError("user name"));
-
-        var entity = new User()
         {
-            Username = request.Username,
-            Mobile = request.Mobile,
-            Email = request.Email,
-            PasswordHash = PasswordHasher.Hash(request.Password),
-            State = request.State,
-            CreatedAt = request.CreatedAt,
-            UpdatedAt = request.UpdatedAt,
-            ConcurrencyStamp = StampGenerator.CreateSecurityStamp(Defaults.SecurityStampLength),
-            SecurityStamp = StampGenerator.CreateSecurityStamp(Defaults.SecurityStampLength),
-        };
+            var response = new OperationResult(OperationResultStatusEnum.UnProcessable,
+               value: GenericResponses.SendResponse("نام کاربری تکراری است.", OperationResultStatusEnum.UnProcessable));
+            return this.ReturnResponse(response);
+        }
+
+
+        //var entity = new User()
+        //{
+        //    Username = request.Username,
+        //    Mobile = request.Mobile,
+        //    Email = request.Email,
+        //    PasswordHash = PasswordHasher.Hash(request.Password),
+        //    State = request.State,
+        //    CreatedAt = request.CreatedAt,
+        //    UpdatedAt = request.UpdatedAt,
+        //    ConcurrencyStamp = StampGenerator.CreateSecurityStamp(Defaults.SecurityStampLength),
+        //    SecurityStamp = StampGenerator.CreateSecurityStamp(Defaults.SecurityStampLength),
+        //};
 
         _unitOfWorkIdentity.Users.Add(entity);
 
