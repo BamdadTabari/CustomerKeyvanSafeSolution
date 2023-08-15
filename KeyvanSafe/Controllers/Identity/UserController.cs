@@ -6,6 +6,7 @@ using KeyvanSafe.Shared.Certain.Enums;
 using KeyvanSafe.Shared.Infrastructure.Errors;
 using KeyvanSafe.Shared.Infrastructure.Operations;
 using KeyvanSafe.Shared.Infrastructure.Routes;
+using KeyvanSafe.Shared.Models.Dtos.Identity.UserDtos;
 using KeyvanSafe.Shared.Models.Requests;
 using KeyvanSafe.Shared.Models.Results.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -40,18 +41,14 @@ public class UserController : ControllerBase
         }
 
 
-        //var entity = new User()
-        //{
-        //    Username = request.Username,
-        //    Mobile = request.Mobile,
-        //    Email = request.Email,
-        //    PasswordHash = PasswordHasher.Hash(request.Password),
-        //    State = request.State,
-        //    CreatedAt = request.CreatedAt,
-        //    UpdatedAt = request.UpdatedAt,
-        //    ConcurrencyStamp = StampGenerator.CreateSecurityStamp(Defaults.SecurityStampLength),
-        //    SecurityStamp = StampGenerator.CreateSecurityStamp(Defaults.SecurityStampLength),
-        //};
+        var dto = new UserDto
+        {
+            Password = request.Password,
+            State = UserStateEnum.Suspended,
+            CreatedAt = DateTime.UtcNow,
+            CreatorId ????????????????????????????
+            
+        };
 
         _unitOfWorkIdentity.Users.Add(entity);
 

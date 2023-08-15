@@ -19,6 +19,7 @@ public class UserDto : BaseDto
     #region Login
 
     public string PasswordHash { get; set; }
+    public string Password { get; set; }
     public DateTime? LastPasswordChangeTime { get; set; }
 
     public int FailedLoginCount { get; set; }

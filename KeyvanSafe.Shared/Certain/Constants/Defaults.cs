@@ -91,7 +91,8 @@ public static class Defaults
     //public const int EmailPrivateTokenLength = 16;
     public const int SmsTokenLength = 4;
     public const int PasswordHashLength = 128;
-    public const int SecurityStampLength = 32;
+    public const int SecurityStampLength = 64;
+    public const int ConcurrencyStampLength = 32;
     public const int GenericHashLength = 128;
 
     #endregion

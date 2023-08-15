@@ -17,7 +17,7 @@ public static class ControllerExtension
         {
             OperationResultStatusEnum.Ok => controller.Ok(response),
             OperationResultStatusEnum.Invalidated => controller.BadRequest(response),
-            OperationResultStatusEnum OperationResultStatus.Unauthorized => controller.UnprocessableEntity(response),
+            OperationResultStatusEnum.Unauthorized => controller.UnprocessableEntity(response),
             OperationResultStatusEnum.UnProcessable => controller.UnprocessableEntity(response),
             _ => controller.UnprocessableEntity(response)
         };
