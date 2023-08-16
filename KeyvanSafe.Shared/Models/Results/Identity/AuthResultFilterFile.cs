@@ -15,7 +15,7 @@ public class GetProfileResultFilter : ResultFilterAttribute
             result.Value = new
             {
                 value.Id,
-                value.Username,
+                value.UserName,
                 Roles = value.UserRoles.Select(x => new
                 {
                     Id = x.RoleId

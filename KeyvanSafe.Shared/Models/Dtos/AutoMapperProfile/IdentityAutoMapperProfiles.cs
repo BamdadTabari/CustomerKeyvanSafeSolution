@@ -17,26 +17,15 @@ public class IdentityAutoMapperProfiles : Profile
     public IdentityAutoMapperProfiles()
     {
         CreateMap<PermissionDto, Permission>().ReverseMap();
+        
         CreateMap<RoleDto, Role>().ReverseMap();
-
-
-        #region User-UserDto
-
-        CreateMap<User, UserDto>();
-
-        CreateMap<UserDto, User>().AfterMap((src, dest) =>
-            {
-                dest.SecurityStamp = StampGenerator.CreateSecurityStamp(Defaults.SecurityStampLength);
-                dest.ConcurrencyStamp = StampGenerator.CreateSecurityStamp(Defaults.ConcurrencyStampLength);
-                dest.PasswordHash = PasswordHasher.Hash(src.Password);
-            }
-        );
-
-        #endregion
-
-
+        
+        CreateMap<User, UserDto>().ReverseMap();
+        
         CreateMap<UserRoleDto, UserRole>().ReverseMap();
+        
         CreateMap<RolePermissionDto, RolePermission>().ReverseMap();
+        
         CreateMap<ClaimDto, Claim>().ReverseMap();
     }
 }

@@ -15,6 +15,6 @@ public class DuplicateUserSpecificationFile : Specification<User>
 
     public override Expression<Func<User, bool>> ToExpression()
     {
-        return user => user.Username.ToLower() == _username.ToLower();
+        return user => user.UserName.ToLower() == _username.ToLower();
     }
 }

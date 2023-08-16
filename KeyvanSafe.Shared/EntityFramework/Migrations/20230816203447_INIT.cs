@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace KeyvanSafe.Shared.EntityFramework.Migrations
 {
-    public partial class Init : Migration
+    public partial class INIT : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,8 +18,6 @@ namespace KeyvanSafe.Shared.EntityFramework.Migrations
                     Name = table.Column<string>(type: "nvarchar(140)", maxLength: 140, nullable: false),
                     Title = table.Column<string>(type: "nvarchar(140)", maxLength: 140, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false),
-                    UpdaterId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -34,8 +33,6 @@ namespace KeyvanSafe.Shared.EntityFramework.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(140)", maxLength: 140, nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false),
-                    UpdaterId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -50,7 +47,10 @@ namespace KeyvanSafe.Shared.EntityFramework.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Mobile = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsMobileConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -60,11 +60,9 @@ namespace KeyvanSafe.Shared.EntityFramework.Migrations
                     LockoutEndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     State = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false),
-                    SecurityStamp = table.Column<string>(type: "nchar(32)", fixedLength: true, maxLength: 32, nullable: false),
+                    SecurityStamp = table.Column<string>(type: "nchar(64)", fixedLength: true, maxLength: 64, nullable: false),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
                     IsLockedOut = table.Column<bool>(type: "bit", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false),
-                    UpdaterId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -80,8 +78,6 @@ namespace KeyvanSafe.Shared.EntityFramework.Migrations
                     Id = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     PermissionId = table.Column<int>(type: "int", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false),
-                    UpdaterId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -110,8 +106,6 @@ namespace KeyvanSafe.Shared.EntityFramework.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false),
-                    UpdaterId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -133,8 +127,6 @@ namespace KeyvanSafe.Shared.EntityFramework.Migrations
                     Id = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false),
-                    UpdaterId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -157,44 +149,44 @@ namespace KeyvanSafe.Shared.EntityFramework.Migrations
 
             migrationBuilder.InsertData(
                 table: "Permission",
-                columns: new[] { "Id", "CreatedAt", "CreatorId", "Name", "Title", "UpdatedAt", "UpdaterId", "Value" },
+                columns: new[] { "Id", "CreatedAt", "Name", "Title", "UpdatedAt", "Value" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9511), 0, "UserManagement", "مدیریت کاربران", new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9514), 0, "identity.users.command" },
-                    { 2, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9522), 0, "RoleManagement", "مدیریت نقش‌ها", new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9524), 0, "identity.roles.command" },
-                    { 3, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9527), 0, "ClaimManagement", "مدیریت دسترسی ها", new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9528), 0, "identity.claims.command" },
-                    { 4, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9531), 0, "UserView", "نمایش  مدیریت کاربران", new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9532), 0, "identity.users.query" },
-                    { 5, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9534), 0, "RoleView", "نمایش  مدیریت نقش ها", new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9536), 0, "identity.roles.query" },
-                    { 6, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9542), 0, "ClaimView", "نمایش  مدیریت دسترسی ها", new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9544), 0, "identity.claims.query" }
+                    { 1, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6243), "UserManagement", "مدیریت کاربران", new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6246), "identity.users.command" },
+                    { 2, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6252), "RoleManagement", "مدیریت نقش‌ها", new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6253), "identity.roles.command" },
+                    { 3, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6256), "ClaimManagement", "مدیریت دسترسی ها", new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6257), "identity.claims.command" },
+                    { 4, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6260), "UserView", "نمایش  مدیریت کاربران", new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6261), "identity.users.query" },
+                    { 5, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6263), "RoleView", "نمایش  مدیریت نقش ها", new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6265), "identity.roles.query" },
+                    { 6, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6269), "ClaimView", "نمایش  مدیریت دسترسی ها", new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6271), "identity.claims.query" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Role",
-                columns: new[] { "Id", "CreatedAt", "CreatorId", "Title", "UpdatedAt", "UpdaterId" },
-                values: new object[] { 1, new DateTime(2023, 8, 7, 10, 5, 36, 324, DateTimeKind.Local).AddTicks(8153), 0, "Owner", new DateTime(2023, 8, 7, 10, 5, 36, 324, DateTimeKind.Local).AddTicks(8154), 0 });
+                columns: new[] { "Id", "CreatedAt", "Title", "UpdatedAt" },
+                values: new object[] { 1, new DateTime(2023, 8, 16, 13, 34, 47, 147, DateTimeKind.Local).AddTicks(3626), "Owner", new DateTime(2023, 8, 16, 13, 34, 47, 147, DateTimeKind.Local).AddTicks(3628) });
 
             migrationBuilder.InsertData(
                 table: "User",
-                columns: new[] { "Id", "ConcurrencyStamp", "CreatedAt", "CreatorId", "Email", "FailedLoginCount", "IsLockedOut", "IsMobileConfirmed", "LastLoginDate", "LastPasswordChangeTime", "LockoutEndTime", "Mobile", "PasswordHash", "SecurityStamp", "State", "UpdatedAt", "UpdaterId", "Username" },
-                values: new object[] { 1, "6CENIMVUC1FV4MNX45OJMJFLEMZRGCEH", new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9258), 0, "bamdadtabari@outlook.com", 0, false, false, null, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9239), null, "09301724389", "6HJ3nVXreGJGBxw4xSuaEOvuxDM/ljwLKgkJPCZ2FeE=.lOSe3TUpmCIMmw7yDPeGZA==", "QFRU1HHGR0DR1EZYMA2SH48EOA75H1JO", "Active", new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9260), 0, "Illegible_Owner" });
+                columns: new[] { "Id", "ConcurrencyStamp", "CreatedAt", "Email", "FailedLoginCount", "FirstName", "FullName", "IsLockedOut", "IsMobileConfirmed", "LastLoginDate", "LastName", "LastPasswordChangeTime", "LockoutEndTime", "Mobile", "PasswordHash", "SecurityStamp", "State", "UpdatedAt", "UserName" },
+                values: new object[] { 1, "BNBURMMZA41CB27XQQ9BAVQPJTBVR41T", new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6039), "bamdadtabari@outlook.com", 0, "Bamdad", "Bamdad Tabari", false, false, null, "Tabari", new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6028), null, "09301724389", "lpMIfapII2rgoO4V/isM9sj+NJjWZb9n8YLZQRFJNxg=.Rn2VMN+QnKfux9uWOOOrTQ==", "HF55X2EXOEZAG6BEYB6PHR1HR3TXW2FDY8ZTS0F8QBYUYKKCA5LKX1B6LXD5VELV", "Active", new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6041), "Illegible_Owner" });
 
             migrationBuilder.InsertData(
                 table: "RolePermission",
-                columns: new[] { "Id", "PermissionId", "RoleId", "CreatedAt", "CreatorId", "UpdatedAt", "UpdaterId" },
+                columns: new[] { "Id", "PermissionId", "RoleId", "CreatedAt", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 0, 1, 1, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9626), 0, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9628), 0 },
-                    { 0, 2, 1, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9633), 0, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9634), 0 },
-                    { 0, 3, 1, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9637), 0, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9638), 0 },
-                    { 0, 4, 1, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9640), 0, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9642), 0 },
-                    { 0, 5, 1, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9644), 0, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9645), 0 },
-                    { 0, 6, 1, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9648), 0, new DateTime(2023, 8, 7, 10, 5, 36, 334, DateTimeKind.Local).AddTicks(9650), 0 }
+                    { 0, 1, 1, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6352), new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6354) },
+                    { 0, 2, 1, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6425), new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6427) },
+                    { 0, 3, 1, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6430), new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6431) },
+                    { 0, 4, 1, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6433), new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6435) },
+                    { 0, 5, 1, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6437), new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6438) },
+                    { 0, 6, 1, new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6441), new DateTime(2023, 8, 16, 13, 34, 47, 156, DateTimeKind.Local).AddTicks(6443) }
                 });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
-                columns: new[] { "Id", "RoleId", "UserId", "CreatedAt", "CreatorId", "UpdatedAt", "UpdaterId" },
-                values: new object[] { 0, 1, 1, new DateTime(2023, 8, 7, 10, 5, 36, 324, DateTimeKind.Local).AddTicks(8084), 0, new DateTime(2023, 8, 7, 10, 5, 36, 324, DateTimeKind.Local).AddTicks(8124), 0 });
+                columns: new[] { "Id", "RoleId", "UserId", "CreatedAt", "UpdatedAt" },
+                values: new object[] { 0, 1, 1, new DateTime(2023, 8, 16, 13, 34, 47, 147, DateTimeKind.Local).AddTicks(3562), new DateTime(2023, 8, 16, 13, 34, 47, 147, DateTimeKind.Local).AddTicks(3594) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Claim_UserId",
@@ -207,9 +199,9 @@ namespace KeyvanSafe.Shared.EntityFramework.Migrations
                 column: "PermissionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_Username",
+                name: "IX_User_UserName",
                 table: "User",
-                column: "Username",
+                column: "UserName",
                 unique: true);
 
             migrationBuilder.CreateIndex(

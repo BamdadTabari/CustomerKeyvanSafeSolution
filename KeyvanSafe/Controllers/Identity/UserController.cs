@@ -2,7 +2,10 @@
 using KeyvanSafe.Domain.EntityFramework.Interfaces.IUnitOfWorks;
 using KeyvanSafe.Domain.Specifications.Identity;
 using KeyvanSafe.Shared.Assistant.Extension;
+using KeyvanSafe.Shared.Assistant.Helpers;
+using KeyvanSafe.Shared.Certain.Constants;
 using KeyvanSafe.Shared.Certain.Enums;
+using KeyvanSafe.Shared.EntityFramework.Entities.Identity.Users;
 using KeyvanSafe.Shared.Infrastructure.Errors;
 using KeyvanSafe.Shared.Infrastructure.Operations;
 using KeyvanSafe.Shared.Infrastructure.Routes;
@@ -31,30 +34,52 @@ public class UserController : ControllerBase
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
         var isExist = await _unitOfWorkIdentity.Users
-            .ExistsAsync(new DuplicateUserSpecificationFile(request.Username).ToExpression());
-
+            .ExistsAsync(new DuplicateUserSpecificationFile(request.UserName).ToExpression());
         if (isExist)
         {
             var response = new OperationResult(OperationResultStatusEnum.UnProcessable,
-               value: GenericResponses.SendResponse("نام کاربری تکراری است.", OperationResultStatusEnum.UnProcessable));
+               value: GenericResponses.SendResponse("نام کاربری تکراری است", OperationResultStatusEnum.Invalidated));
             return this.ReturnResponse(response);
         }
 
-
         var dto = new UserDto
         {
+            UserName = request.UserName,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            FullName = request.FirstName + " " + request.LastName,
             Password = request.Password,
             State = UserStateEnum.Suspended,
+            Email = request.Email,
+            Mobile = request.Mobile,
+            IsMobileConfirmed = false,
+            FailedLoginCount = 0,
+            IsLockedOut = false,
+            LastLoginDate = DateTime.UtcNow,
+            LastPasswordChangeTime = DateTime.UtcNow,
+            LockoutEndTime = DateTime.UtcNow,
+            PasswordHash = PasswordHasher.Hash(request.Password),
+            ConcurrencyStamp = StampGenerator.CreateSecurityStamp(Defaults.ConcurrencyStampLength),
+            SecurityStamp = StampGenerator.CreateSecurityStamp(Defaults.SecurityStampLength),
             CreatedAt = DateTime.UtcNow,
-            CreatorId ????????????????????????????
-            
+            UpdatedAt = DateTime.UtcNow
         };
 
-        _unitOfWorkIdentity.Users.Add(entity);
+        try
+        {
+            var entity = _mapper.Map<User>(dto);
+           
+            await _unitOfWorkIdentity.Users.AddAsync(entity);
 
-        var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true, value: entity);
-
-        return this.ReturnResponse(operation);
+            var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true, value: entity);
+            return this.ReturnResponse(operation);
+        }
+        catch
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true,
+                value: GenericResponses.SendResponse("خطایی در سمت سرور رخ داده است", OperationResultStatusEnum.UnProcessable));
+            return this.ReturnResponse(operation);
+        }
     }
 
     //[HttpPut(IdentityRoutes.Users + "{ueid}")]

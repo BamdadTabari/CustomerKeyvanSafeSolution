@@ -25,7 +25,7 @@ public static class JwtHelper
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.UniqueName, user.Username.ToLower())
+            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName.ToLower())
         };
 
         var accessToken = new JwtSecurityToken(

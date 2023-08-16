@@ -33,7 +33,7 @@ public class CreateUserResultFilter : ResultFilterAttribute
             result.Value = new
             {
                 value.Id,
-                value.Username
+                value.UserName
             };
 
         await next();
@@ -73,7 +73,7 @@ public class GetUserByFilterResultFilter : ResultFilterAttribute
                 Data = value.Data.Select(x => new
                 {
                     x.Id,
-                    x.Username,
+                    x.UserName,
                     //x.IsEmailConfirmed,
                     x.IsMobileConfirmed,
                     x.IsLockedOut,
@@ -104,7 +104,7 @@ public class GetUserByIdResultFilter : ResultFilterAttribute
             result.Value = new
             {
                 value.Id,
-                value.Username,
+                value.UserName,
                 //value.IsEmailConfirmed,
                 value.IsMobileConfirmed,
                 value.IsLockedOut,
@@ -131,7 +131,7 @@ public class UpdateUserResultFilter : ResultFilterAttribute
             result.Value = new
             {
                 value.Id,
-                value.Username,
+                value.UserName,
                 value.UpdatedAt
             };
 

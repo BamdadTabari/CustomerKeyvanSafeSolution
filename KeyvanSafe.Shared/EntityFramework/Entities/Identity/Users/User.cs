@@ -12,8 +12,10 @@ public class User : BaseEntity
 {
     #region Identity
 
-    public string Username { get; set; }
-
+    public string UserName { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string FullName { get; set; }
     public string Mobile { get; set; }
     public bool IsMobileConfirmed { get; set; }
 
@@ -58,11 +60,11 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(x => x.Id);
 
-        builder.HasIndex(b => b.Username).IsUnique();
+        builder.HasIndex(b => b.UserName).IsUnique();
 
         #region Mappings
 
-        builder.Property(b => b.Username)
+        builder.Property(b => b.UserName)
             .HasMaxLength(Defaults.UsernameMaxLength)
             .IsRequired();
 
@@ -82,7 +84,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(b => b.ConcurrencyStamp)
             .IsConcurrencyToken()
-            .HasMaxLength(Defaults.SecurityStampLength);
+            .HasMaxLength(Defaults.ConcurrencyStampLength);
 
         #endregion
 

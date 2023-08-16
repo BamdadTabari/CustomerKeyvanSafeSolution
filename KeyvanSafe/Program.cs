@@ -7,9 +7,12 @@ var appName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
 
 builder.Configuration.AddJsonFile("appsettings.json")
             .AddEnvironmentVariables();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 ConfigurationManager configuration = builder.Configuration;
 IWebHostEnvironment environment = builder.Environment;
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 // Add services to the container.
 builder.Services.AddServices(configuration);
 builder.Services.AddControllers();

@@ -11,7 +11,7 @@ public static class UserQueryableExtension
         // Filter by uSERNAME
         if (!string.IsNullOrEmpty(filter.Name))
             query = query.Where(x =>
-                x.Username.ToLower().Contains(filter.Name.ToLower().Trim()));
+                x.UserName.ToLower().Contains(filter.Name.ToLower().Trim()));
 
         // Filter by email
         if (!string.IsNullOrEmpty(filter.StringValue))

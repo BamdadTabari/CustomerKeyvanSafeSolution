@@ -36,7 +36,7 @@ public class UserRepository : Repository<User>, IUserRepository
     {
         var user = await _queryable
             .Include(x => x.UserRoles)
-            .SingleOrDefaultAsync(x => x.Username.ToLower() == username.ToLower());
+            .SingleOrDefaultAsync(x => x.UserName.ToLower() == username.ToLower());
 
         if (user == null)
             throw new NullReferenceException("user not found with this name ");
