@@ -30,7 +30,7 @@ public class UserController : ControllerBase
     #region User
 
     [HttpPost(IdentityRoutes.Users)]
-    [CreateUserResultFilter]
+    //[CreateUserResultFilter]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
         var isExist = await _unitOfWorkIdentity.Users
@@ -70,13 +70,14 @@ public class UserController : ControllerBase
             var entity = _mapper.Map<User>(dto);
            
             await _unitOfWorkIdentity.Users.AddAsync(entity);
+            await _unitOfWorkIdentity.CommitAsync();
 
             var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true, value: entity);
             return this.ReturnResponse(operation);
         }
         catch
         {
-            var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true,
+            var operation = new OperationResult(OperationResultStatusEnum.UnProcessable, isPersistAble: true,
                 value: GenericResponses.SendResponse("خطایی در سمت سرور رخ داده است", OperationResultStatusEnum.UnProcessable));
             return this.ReturnResponse(operation);
         }

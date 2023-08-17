@@ -27,7 +27,7 @@ public static class ServiceInjection
             return new HttpClient { BaseAddress = new Uri(baseAddress) };
         });
 
-        //services.AddScoped<IHttpService, HttpService>();
+        services.AddScoped<IHttpService, HttpService>();
 
         services.AddDbContext<AppDbContext>(options =>
           options.UseSqlServer(configuration.GetConnectionString("ServerDbConnection"))

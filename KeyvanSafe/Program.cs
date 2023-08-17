@@ -1,4 +1,5 @@
 using KeyvanSafe.Server.Configs;
+using KeyvanSafe.Shared.Models.Dtos.AutoMapperProfile;
 
 #region builder part
 var builder = WebApplication.CreateBuilder(args);
@@ -7,8 +8,7 @@ var appName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
 
 builder.Configuration.AddJsonFile("appsettings.json")
             .AddEnvironmentVariables();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+builder.Services.AddAutoMapper(typeof(IdentityAutoMapperProfiles));
 ConfigurationManager configuration = builder.Configuration;
 IWebHostEnvironment environment = builder.Environment;
 

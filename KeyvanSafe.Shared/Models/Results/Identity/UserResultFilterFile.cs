@@ -33,7 +33,8 @@ public class CreateUserResultFilter : ResultFilterAttribute
             result.Value = new
             {
                 value.Id,
-                value.UserName
+                value.UserName,
+                ConcurrencyStamp = 0,
             };
 
         await next();
