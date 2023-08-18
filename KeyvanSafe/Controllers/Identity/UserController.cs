@@ -83,23 +83,36 @@ public class UserController : ControllerBase
         }
     }
 
-    //[HttpPut(IdentityRoutes.Users + "{ueid}")]
-    //[UpdateUserResultFilter]
-    //public async Task<IActionResult> UpdateUser([FromRoute] string ueid, [FromBody] UpdateUserRequest request)
-    //{
-    //    var userId = ueid.DecodeInt();
+    [HttpPut(IdentityRoutes.Users + "{id}")]
+    public async Task<IActionResult> UpdateUser([FromRoute] int id, [FromBody] UpdateUserRequest request)
+    {
+        var user = await _unitOfWorkIdentity.Users.GetUserByIdAsync(id);
 
-    //    var operation = await _mediator.Send(new UpdateUserCommand(Request.GetRequestInfo())
-    //    {
-    //        UserId = userId,
-    //        Username = request.Username,
-    //        Email = request.Email,
-    //        Password = request.Password,
-    //        Mobile = request.Mobile,
-    //    });
+        if (user == null)
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.UnProcessable,
+                value: GenericResponses.SendResponse("کاربری با این آی دی یافت نشد", OperationResultStatusEnum.UnProcessable));
+            return this.ReturnResponse(operation);
+        }
+             
 
-    //    return this.ReturnResponse(operation);
-    //}
+        if (user.PasswordHash != PasswordHasher.Hash(request.Password))
+            return new OperationResult(OperationResultStatus.UnProcessable, value: GenericErrors<User>.InvalidVariableError("password"));
+
+        // Update
+        user.Mobile = request.Mobile;
+        user.Email = request.Email;
+        user.Username = request.Username;
+        if (user.Email != request.Email)
+            user.IsEmailConfirmed = false;
+        if (user.Mobile != request.Mobile)
+            user.IsMobileConfirmed = false;
+
+        _unitOfWork.Users.Update(user);
+
+        return new OperationResult(OperationResultStatus.Ok, isPersistAble: true, value: user);
+        return this.ReturnResponse(operation);
+    }
 
     //[HttpGet(IdentityRoutes.Users + "{ueid}")]
     //[GetUserByIdResultFilter]
