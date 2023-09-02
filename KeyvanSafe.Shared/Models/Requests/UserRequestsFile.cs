@@ -29,6 +29,7 @@ public record GetUserByFilterRequest : DefaultPaginationFilter
 public record UpdateUserPasswordRequest
 {
     public string NewPassword { get; set; }
+    public string RetypeNewPassword { get; set; }
     public string LastPassword { get; set; }
 }
 

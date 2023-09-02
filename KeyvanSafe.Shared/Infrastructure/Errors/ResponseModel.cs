@@ -3,12 +3,12 @@
 namespace KeyvanSafe.Shared.Infrastructure.Errors;
 public struct ResponseModel
 {
-    public ResponseModel(OperationResultStatusEnum httpStatusCodeCode, string message)
+    public ResponseModel(OperationResultStatusEnum statusCode, string message)
     {
-        HttpStatusCodeCode = httpStatusCodeCode;
+        StatusCode = statusCode;
         Message = message;
     }
 
     public  string Message { get; set; }
-    public  OperationResultStatusEnum HttpStatusCodeCode { get; set; }
+    public  OperationResultStatusEnum StatusCode { get; set; }
 }

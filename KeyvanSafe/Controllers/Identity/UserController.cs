@@ -84,7 +84,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut(IdentityRoutes.Users + "{id}")]
-    public async Task<IActionResult> UpdateUser([FromRoute] int id, [FromBody] UpdateUserRequest request)
+    public async Task<IActionResult> UpdateUserInfo([FromRoute] int id, [FromBody] UpdateUserRequest request)
     {
         var user = await _unitOfWorkIdentity.Users.GetUserByIdAsync(id);
 
@@ -97,7 +97,11 @@ public class UserController : ControllerBase
              
 
         if (user.PasswordHash != PasswordHasher.Hash(request.Password))
-            return new OperationResult(OperationResultStatus.UnProcessable, value: GenericErrors<User>.InvalidVariableError("password"));
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.UnProcessable,
+               value: GenericResponses.SendResponse(" پسورد ", OperationResultStatusEnum.UnProcessable));
+        }
+           
 
         // Update
         user.Mobile = request.Mobile;
@@ -110,7 +114,7 @@ public class UserController : ControllerBase
 
         _unitOfWork.Users.Update(user);
 
-        return new OperationResult(OperationResultStatus.Ok, isPersistAble: true, value: user);
+        return new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true, value: user);
         return this.ReturnResponse(operation);
     }
 
