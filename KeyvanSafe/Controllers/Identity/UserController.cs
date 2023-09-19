@@ -11,7 +11,6 @@ using KeyvanSafe.Shared.Infrastructure.Operations;
 using KeyvanSafe.Shared.Infrastructure.Routes;
 using KeyvanSafe.Shared.Models.Dtos.Identity.UserDtos;
 using KeyvanSafe.Shared.Models.Requests;
-using KeyvanSafe.Shared.Models.Results.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KeyvanSafe.Server.Controllers.Identity;
@@ -27,10 +26,7 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
 
-    #region User
-
     [HttpPost(IdentityRoutes.Users)]
-    //[CreateUserResultFilter]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
         var isExist = await _unitOfWorkIdentity.Users
@@ -72,7 +68,8 @@ public class UserController : ControllerBase
             await _unitOfWorkIdentity.Users.AddAsync(entity);
             await _unitOfWorkIdentity.CommitAsync();
 
-            var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true, value: entity);
+            var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true,
+                value: GenericResponses.SendResponse("عملیات با موفقیت انجام شد", OperationResultStatusEnum.Ok));
             return this.ReturnResponse(operation);
         }
         catch
@@ -90,66 +87,158 @@ public class UserController : ControllerBase
 
         if (user == null)
         {
-            var operation = new OperationResult(OperationResultStatusEnum.UnProcessable,
-                value: GenericResponses.SendResponse("کاربری با این آی دی یافت نشد", OperationResultStatusEnum.UnProcessable));
+            var operation = new OperationResult(OperationResultStatusEnum.NotFound,
+                value: GenericResponses.SendResponse("کاربری با این آی دی یافت نشد", OperationResultStatusEnum.NotFound));
             return this.ReturnResponse(operation);
         }
              
 
         if (user.PasswordHash != PasswordHasher.Hash(request.Password))
         {
-            var operation = new OperationResult(OperationResultStatusEnum.UnProcessable,
-               value: GenericResponses.SendResponse(" پسورد ", OperationResultStatusEnum.UnProcessable));
+            var operation = new OperationResult(OperationResultStatusEnum.Invalidated,
+               value: GenericResponses.SendResponse(" رمز عبور اشتباه است ", OperationResultStatusEnum.Invalidated));
+            return this.ReturnResponse(operation);
         }
-           
-
         // Update
-        user.Mobile = request.Mobile;
         user.Email = request.Email;
-        user.Username = request.Username;
-        if (user.Email != request.Email)
-            user.IsEmailConfirmed = false;
-        if (user.Mobile != request.Mobile)
-            user.IsMobileConfirmed = false;
+        user.UserName = request.UserName;
+        user.FirstName = request.FirstName;
+        user.LastName = request.LastName;
+        user.FullName = request.FirstName + " " + request.LastName;
+        user.Email = request.Email;
+        user.UpdatedAt = DateTime.UtcNow;
 
-        _unitOfWork.Users.Update(user);
+        try
+        {
+            _unitOfWorkIdentity.Users.Update(user);
+            await _unitOfWorkIdentity.CommitAsync();
 
-        return new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true, value: user);
-        return this.ReturnResponse(operation);
+            var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true,
+                value: GenericResponses.SendResponse("عملیات با موفقیت انجام شد", OperationResultStatusEnum.Ok));
+            return this.ReturnResponse(operation);
+        }
+        catch
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.UnProcessable, isPersistAble: true,
+                value: GenericResponses.SendResponse("خطایی در سمت سرور رخ داده است", OperationResultStatusEnum.UnProcessable));
+            return this.ReturnResponse(operation);
+        }
     }
 
-    //[HttpGet(IdentityRoutes.Users + "{ueid}")]
-    //[GetUserByIdResultFilter]
-    //public async Task<IActionResult> GetUserById([FromRoute] string ueid)
-    //{
-    //    var userId = ueid.DecodeInt();
+    [HttpGet(IdentityRoutes.Users + "{id}")]
+    public async Task<IActionResult> GetUserById([FromRoute] int id)
+    {
+        var user = await _unitOfWorkIdentity.Users.GetUserByIdAsync(id);
 
-    //    var operation = await _mediator.Send(new GetUserByIdQuery(Request.GetRequestInfo())
-    //    {
-    //        UserId = userId
-    //    });
+        if (user == null)
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.NotFound,
+                value: GenericResponses.SendResponse("کاربری با این آی دی یافت نشد", OperationResultStatusEnum.NotFound));
+            return this.ReturnResponse(operation);
+        }
 
-    //    return this.ReturnResponse(operation);
-    //}
+        try
+        {
+            var dto = _mapper.Map<UserDto>(user);
+            var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true,
+                value: dto);
+            return this.ReturnResponse(operation);
+        }
+        catch
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.UnProcessable, isPersistAble: true,
+                value: GenericResponses.SendResponse("خطایی در سمت سرور رخ داده است", OperationResultStatusEnum.UnProcessable));
+            return this.ReturnResponse(operation);
+        }
+    }
+
+    [HttpPatch(IdentityRoutes.Users + "{id}/update-mobile")]
+    public async Task<IActionResult> UpdateUserMobileNumber([FromRoute] int id, [FromBody] UpdateUserMobileRequest request)
+    {
+        var user = await _unitOfWorkIdentity.Users.GetUserByIdAsync(id);
+
+        if (user == null)
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.NotFound,
+                value: GenericResponses.SendResponse("کاربری با این آی دی یافت نشد", OperationResultStatusEnum.NotFound));
+            return this.ReturnResponse(operation);
+        }
 
 
-    //// Patch Password
-    //[HttpPatch(IdentityRoutes.Users + "{ueid}/password")]
-    //[UpdateUserResultFilter]
-    //public async Task<IActionResult> UpdateUserPassword([FromRoute] string ueid, [FromBody] UpdateUserPasswordRequest request)
-    //{
-    //    var userId = ueid.DecodeInt();
+        if (user.PasswordHash != PasswordHasher.Hash(request.Password))
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.Invalidated,
+               value: GenericResponses.SendResponse(" رمز عبور اشتباه است ", OperationResultStatusEnum.Invalidated));
+            return this.ReturnResponse(operation);
+        }
+        // Update Mobile Number
+        user.Mobile = request.NewMobileNumber;
+        if (user.Mobile != request.NewMobileNumber)
+            user.IsMobileConfirmed = false;
 
-    //    var operation = await _mediator.Send(new UpdateUserPasswordCommand(Request.GetRequestInfo())
-    //    {
-    //        UserId = userId,
-    //        NewPassword = request.NewPassword
-    //    });
+        try
+        {
+            _unitOfWorkIdentity.Users.Update(user);
+            await _unitOfWorkIdentity.CommitAsync();
 
-    //    return this.ReturnResponse(operation);
-    //}
+            var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true,
+                value: GenericResponses.SendResponse("عملیات با موفقیت انجام شد", OperationResultStatusEnum.Ok));
+            return this.ReturnResponse(operation);
+        }
+        catch
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.UnProcessable, isPersistAble: true,
+                value: GenericResponses.SendResponse("خطایی در سمت سرور رخ داده است", OperationResultStatusEnum.UnProcessable));
+            return this.ReturnResponse(operation);
+        }
+    }
 
-    #endregion
+    // Patch Password
+    [HttpPatch(IdentityRoutes.Users + "{id}/update-password")]
+    public async Task<IActionResult> UpdateUserPassword([FromRoute] int id, [FromBody] UpdateUserPasswordRequest request)
+    {
+        var user = await _unitOfWorkIdentity.Users.GetUserByIdAsync(id);
+
+        if (user == null)
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.NotFound,
+                value: GenericResponses.SendResponse("کاربری با این آی دی یافت نشد", OperationResultStatusEnum.NotFound));
+            return this.ReturnResponse(operation);
+        }
+
+        if (user.PasswordHash != PasswordHasher.Hash(request.LastPassword))
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.Invalidated,
+               value: GenericResponses.SendResponse(" رمز عبور اشتباه است ", OperationResultStatusEnum.Invalidated));
+            return this.ReturnResponse(operation);
+        }
+
+        if (request.NewPassword != request.RetypeNewPassword)
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.Invalidated,
+               value: GenericResponses.SendResponse(" رمز عبور جدید با تکرار آن مطابقت ندارد ", OperationResultStatusEnum.Invalidated));
+            return this.ReturnResponse(operation);
+        }
+
+        try
+        {
+            // Update Password
+            user.Mobile = PasswordHasher.Hash(request.NewPassword);
+
+            _unitOfWorkIdentity.Users.Update(user);
+            await _unitOfWorkIdentity.CommitAsync();
+
+            var operation = new OperationResult(OperationResultStatusEnum.Ok, isPersistAble: true,
+                value: GenericResponses.SendResponse("عملیات با موفقیت انجام شد", OperationResultStatusEnum.Ok));
+            return this.ReturnResponse(operation);
+        }
+        catch
+        {
+            var operation = new OperationResult(OperationResultStatusEnum.UnProcessable, isPersistAble: true,
+                value: GenericResponses.SendResponse("خطایی در سمت سرور رخ داده است", OperationResultStatusEnum.UnProcessable));
+            return this.ReturnResponse(operation);
+        }
+    }
 
     //#region Role
 

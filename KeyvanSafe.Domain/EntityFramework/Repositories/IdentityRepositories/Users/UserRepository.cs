@@ -27,7 +27,7 @@ public class UserRepository : Repository<User>, IUserRepository
             .SingleOrDefaultAsync(x => x.Id == id);
 
         if (user == null)
-            throw new NullReferenceException("user not found with this id");
+            throw new NullReferenceException("یوزر با این آیدی پیدا نشد");
 
         return user;
     }
@@ -63,20 +63,12 @@ public class UserRepository : Repository<User>, IUserRepository
         if (ids?.Any() == true)
             query = query.Where(x => ids.Contains(x.Id));
 
-        query = query.ApplySort(UserSortByEnum.CreationDate);
-
-        return await query.ToListAsync();
+        return await query.ApplySort(UserSortByEnum.CreationDate).ToListAsync();
     }
+
 
     public async Task<List<User>> GetUsersByFilterAsync(DefaultPaginationFilter filter)
-    {
-        var query = _queryable;
+    => await _queryable.AsNoTracking().ApplyFilter(filter).ApplySort(filter.UserSortByEnum)
+            .Paginate(filter.Page, filter.PageSize).ToListAsync();
 
-        query = query.AsNoTracking();
-
-        query = query.ApplyFilter(filter);
-        query = query.ApplySort(filter.UserSortByEnum);
-
-        return await query.Paginate(filter.Page, filter.PageSize).ToListAsync();
-    }
 }
